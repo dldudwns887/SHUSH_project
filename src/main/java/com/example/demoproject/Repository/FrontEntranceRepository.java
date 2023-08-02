@@ -1,6 +1,6 @@
 package com.example.demoproject.Repository;
 
-import com.example.demoproject.entity.FrontEntranceEntity;
+import com.example.demoproject.Entity.FrontEntranceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package com.example.demoproject.controller;
+package com.example.demoproject.Controller;
 
 import com.example.demoproject.Repository.FrontEntranceRepository;
-import com.example.demoproject.entity.FrontEntranceEntity;
+import com.example.demoproject.Entity.FrontEntranceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
