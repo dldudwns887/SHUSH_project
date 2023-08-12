@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="FrontEntrance")
-@Table(name="front_entrance")
+@Entity(name="CEntrance")
+@Table(name="c")
 
-public class FrontEntranceEntity {
+public class CEntranceEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)//
     private String seq;
