@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name="FrontEntrance")
-@Table(name="front_entrance")
+@Table(name="a")
 
 public class FrontEntranceEntity {
     @Id
@@ -21,7 +21,4 @@ public class FrontEntranceEntity {
     private int dB;
     private String time;
     private char pointA;
-
-
-
 }
