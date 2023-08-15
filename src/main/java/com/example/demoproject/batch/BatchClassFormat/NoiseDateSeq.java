@@ -2,21 +2,15 @@ package com.example.demoproject.batch.BatchClassFormat;
 
 public class NoiseDateSeq {
 
-    private int year;
-    private int month;
-    private int date;
-    private char pointA;
-    private int seq;
+    private String date;
+    private int hour;
     private int dB;
 
     public NoiseDateSeq(){}
 
-    public NoiseDateSeq( int year, int month, int date, char pointA, int seq, int dB){
-        this.year = year;
-        this.month =month;
+    public NoiseDateSeq(String date, int hour, int dB){
         this.date = date;
-        this.seq = seq;
-        this.pointA = pointA;
+        this.hour = hour;
         this.dB = dB;
     }
 
@@ -24,23 +18,11 @@ public class NoiseDateSeq {
         return dB;
     }
 
-    public char getPointA() {
-        return pointA;
+    public int getHour() {
+        return hour;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getSeq() {
-        return seq;
-    }
-
-    public int getYear() {
-        return year;
     }
 }

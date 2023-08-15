@@ -11,14 +11,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="FrontEntrance")
+@Entity(name="AEntrance")
 @Table(name="a")
 
-public class FrontEntranceEntity {
+public class AEntranceEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)//
     private String seq;
     private int dB;
     private String time;
     private char pointA;
+
+    public int getDB() {
+        return dB;
+    }
 }
