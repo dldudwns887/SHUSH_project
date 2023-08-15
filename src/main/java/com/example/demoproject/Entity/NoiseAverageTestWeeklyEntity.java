@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="NoiseAverageTest")
-@Table(name="noise_Average_test_table")
+@Entity(name="NoiseAverageWeeklyTest")
+@Table(name="noise_Average_test_weekly_table")
 
-public class NoiseAverageTestEntity {
+public class NoiseAverageTestWeeklyEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)//
-    private String date;
-    private int hour;
+    private String startDate;
+    private String endDate;
     private double avg;
 }

@@ -2,6 +2,8 @@ package com.example.demoproject.Repository;
 
 import com.example.demoproject.Entity.NoiseAverageTestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface NoiseAverageTestRopository extends JpaRepository<NoiseAverageTestEntity, String> {
+@Repository
+public interface NoiseAverageTestRepository extends JpaRepository<NoiseAverageTestEntity, String> {
 }
