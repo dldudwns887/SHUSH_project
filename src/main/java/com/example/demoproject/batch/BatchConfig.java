@@ -17,7 +17,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     //item reader
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
-
+    //to redo a branch
     @Bean
     public JpaPagingItemReader<NoisePer10Sec> itemReader(){
         return new JpaPagingItemReaderBuilder<NoisePer10Sec>()
