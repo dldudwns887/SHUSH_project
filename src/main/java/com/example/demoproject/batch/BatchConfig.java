@@ -14,17 +14,28 @@ import org.springframework.context.annotation.Configuration;
 public class BatchConfig extends DefaultBatchConfiguration {
 
 
+
+
     //item reader
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
-    //to redo a branch
     @Bean
-    public JpaPagingItemReader<NoisePer10Sec> itemReader(){
+    public JpaPagingItemReader<NoisePer10Sec> itemReader359(){
         return new JpaPagingItemReaderBuilder<NoisePer10Sec>()
                 .name("noiseReader")
                 .entityManagerFactory(entityManagerFactory)
                 .queryString("select n from NoisePer10Sec n")
-                .pageSize(8639)
+                .pageSize(359)
+                .build();
+    }
+
+    @Bean
+    public JpaPagingItemReader<NoisePer10Sec> itemReader360(){
+        return new JpaPagingItemReaderBuilder<NoisePer10Sec>()
+                .name("noiseReader")
+                .entityManagerFactory(entityManagerFactory)
+                .queryString("select n from NoisePer10Sec n")
+                .pageSize(360)
                 .build();
     }
 
