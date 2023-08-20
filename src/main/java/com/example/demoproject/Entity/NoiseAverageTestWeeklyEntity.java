@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 
 public class NoiseAverageTestWeeklyEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)//
     private String startDate;
     private String endDate;
     private double avg;

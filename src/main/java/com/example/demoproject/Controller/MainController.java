@@ -28,16 +28,25 @@ public class MainController {
     //private ShushDataService dataService;
     final private ShushDataService shushDataService;
 
+    @GetMapping("loadAverageData")
+    public void DataAverageLoad(){
+        System.out.println("started hourly calculating");
+        shushDataService.calculateHourlyAverage(360);
+        System.out.println("ended hourly calculating");
+        System.out.println("started daily calculating");
+        shushDataService.calculateDailyAverage();
+        System.out.println("ended daily calculating");
+        System.out.println("started weekly calculating");
+        shushDataService.calculateWeeklyAverage();
+        System.out.println("ended weekly calculating");
+
+    }
+
     @GetMapping("data")
     public List<AEntranceEntity> rawData(){
-        System.out.println("started calculating");
-        shushDataService.calculateHourlyAverage(360);
-        shushDataService.calculateDailyAverage();
-        shushDataService.calculateWeeklyAverage();
-        System.out.println("ended calculating");
-
         return aEntranceRepository.findAll();
     }
+
     @GetMapping("averageDataHourly")
     public List<NoiseAverageTestEntity> hourlyAverageData(){
         //dataService.calculateHourlyAverage(360);

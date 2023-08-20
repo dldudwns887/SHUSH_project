@@ -23,6 +23,7 @@ public class ShushDataService {
     private NoiseAverageTestDailyRepository averageTestDailyRepository;
     private NoiseAverageTestWeeklyRepository averageTestWeeklyRepository;
 
+
     public ShushDataService(AEntranceRepository aEntranceRepository,
                             /*BEntranceRepository bEntranceRepository,
                             CEntranceRepository cEntranceRepository,
@@ -65,9 +66,12 @@ public class ShushDataService {
 
             NoiseAverageTestEntity avgData = new NoiseAverageTestEntity();
             avgData.setAvg(average);
-            avgData.setDate(noises.get(0).getTime().substring(0, 10));//날짜
-            avgData.setHour(Integer.parseInt(noises.get(0).getTime().substring(11, 13))); //시간
-
+            HourlyAverageId hourlyAverageId = new HourlyAverageId();
+            //avgData.setDate(noises.get(0).getTime().substring(0, 10));//날짜
+            //avgData.setHour(Integer.parseInt(noises.get(0).getTime().substring(11, 13))); //시간
+            hourlyAverageId.setDate(noises.get(0).getTime().substring(0, 10));
+            hourlyAverageId.setHour(Integer.parseInt(noises.get(0).getTime().substring(11, 13)));
+            avgData.setId(hourlyAverageId);
             averageTestRepository.save(avgData);
 
             if (pageA.isLast()) break;
@@ -92,8 +96,13 @@ public class ShushDataService {
 
             NoiseAverageTestDailyEntity dailyAvg = new NoiseAverageTestDailyEntity();
             dailyAvg.setDate(avgs.get(0).getDate());
-            dailyAvg.setAvg(sum / avgs.size());
+            dailyAvg.setAvg( sum / avgs.size() );
 
+            averageTestDailyRepository.save(dailyAvg);
+
+            if (page.isLast()) break;
+
+            pageable = pageable.next();
 
         }
     }
@@ -112,11 +121,18 @@ public class ShushDataService {
                 sum += i.getAvg();
             }
 
-            NoiseAverageTestWeeklyEntity dailyAvg = new NoiseAverageTestWeeklyEntity();
-            dailyAvg.setStartDate(avgs.get(0).getDate());
-            dailyAvg.setEndDate(avgs.get(23).getDate());
-            dailyAvg.setAvg(sum / avgs.size());
+            NoiseAverageTestWeeklyEntity weeklyAvg = new NoiseAverageTestWeeklyEntity();
+            weeklyAvg.setStartDate(avgs.get(0).getDate());
+            weeklyAvg.setEndDate(avgs.get(6).getDate());
+            weeklyAvg.setAvg(sum / avgs.size());
+
+            averageTestWeeklyRepository.save(weeklyAvg);
+
+            if (page.isLast()) break;
+
+            pageable = pageable.next();
         }
+
 
 
     }

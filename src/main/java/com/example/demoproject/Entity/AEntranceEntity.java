@@ -18,6 +18,7 @@ public class AEntranceEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)//
     private String seq;
+
     private int dB;
     private String time;
     private char pointA;

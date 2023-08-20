@@ -15,9 +15,21 @@ import lombok.NoArgsConstructor;
 @Table(name="noise_Average_test_table")
 
 public class NoiseAverageTestEntity {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)//
-    private String date;
-    private int hour;
+   @EmbeddedId
+   private HourlyAverageId Id;
     private double avg;
+
+    public void setDate(String date){
+        this.Id.setDate(date);
+    }
+    public void setHour(int hour){
+        this.Id.setHour(hour);
+    }
+    public String getDate(){
+        return this.Id.getDate();
+    }
+    public int getHour(){
+        return this.Id.getHour();
+    }
+
 }

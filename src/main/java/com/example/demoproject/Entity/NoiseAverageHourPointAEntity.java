@@ -15,9 +15,21 @@ import lombok.NoArgsConstructor;
 @Table(name="noise_average_hour_point_a")
 
 public class NoiseAverageHourPointAEntity {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)//
-    private String date;
-    private int hour;
+    @EmbeddedId
+    private HourlyAverageId Id;
     private double avg;
+
+    public void setDate(String date){
+        this.Id.setDate(date);
+    }
+    public void setHour(int hour){
+        this.Id.setHour(hour);
+    }
+    public String getDate(){
+        return this.Id.getDate();
+    }
+    public int getHour(){
+        return this.Id.getHour();
+    }
+
 }
