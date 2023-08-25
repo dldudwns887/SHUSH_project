@@ -42,7 +42,8 @@ public class MainController {
 
     }
 
-    @GetMapping("data")
+    @ResponseBody
+    @PostMapping("data")
     public List<AEntranceEntity> rawData(){
         return aEntranceRepository.findAll();
     }
@@ -50,20 +51,28 @@ public class MainController {
     @GetMapping("averageDataHourly")
     public List<NoiseAverageTestEntity> hourlyAverageData(){
         //dataService.calculateHourlyAverage(360);
-
+        System.out.println("Hourly data requested");
         return noiseAverageTestRepository.findAll();
+
     }
 
     @GetMapping("averageDataDaily")
     public List<NoiseAverageTestDailyEntity> dailyAverageData(){
         //dataService.calculateDailyAverage();
+        System.out.println("Daily data requested");
         return noiseAverageTestDailyRepository.findAll();
     }
 
     @GetMapping("averageDataWeekly")
     public List<NoiseAverageTestWeeklyEntity> weeklyAverageData(){
         //dataService.calculateWeeklyAverage();
+        System.out.println("weekly data requested");
         return noiseAverageTestWeeklyRepository.findAll();
+    }
+
+    @GetMapping("hello")
+    public String test() {
+        return "Hello, world!";
     }
 
 }
