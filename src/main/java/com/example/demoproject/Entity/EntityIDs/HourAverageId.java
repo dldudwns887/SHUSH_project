@@ -1,20 +1,22 @@
-package com.example.demoproject.Entity;
+package com.example.demoproject.Entity.EntityIDs;
 
 import jakarta.persistence.Embeddable;
-
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class HourlyAverageId implements Serializable {
-    private String date;
+public class HourAverageId implements Serializable {
+    private int year;
+    private int month;
+    private int day;
     private int hour;
-
+    private char a;
 }

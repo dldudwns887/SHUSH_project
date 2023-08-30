@@ -1,78 +1,168 @@
 package com.example.demoproject.Controller;
-
-import com.example.demoproject.Entity.NoiseAverageTestDailyEntity;
-import com.example.demoproject.Entity.NoiseAverageTestEntity;
-import com.example.demoproject.Entity.NoiseAverageTestWeeklyEntity;
-import com.example.demoproject.Repository.AEntranceRepository;
-import com.example.demoproject.Entity.AEntranceEntity;
-import com.example.demoproject.Repository.NoiseAverageTestDailyRepository;
-import com.example.demoproject.Repository.NoiseAverageTestRepository;
-import com.example.demoproject.Repository.NoiseAverageTestWeeklyRepository;
+import com.example.demoproject.Entity.AverageEntity.*;
+import com.example.demoproject.Repository.AverageRepository.*;
 import com.example.demoproject.Service.ShushDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.time.*;
 
 
 @CrossOrigin(originPatterns = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController//해당 클래스를 Controller 레이어로 인식하게함//@Controller+@REsponseBody임
-@RequestMapping(value= "/*")//()안에 URL패턴이 오고 - request왔을때 request의 url의 패턴을 보고 해당하는 클래스를 실행
+@RequestMapping(value= "/getAverageData")//()안에 URL패턴이 오고 - request왔을때 request의 url의 패턴을 보고 해당하는 클래스를 실행
 public class MainController {
 
-    final private AEntranceRepository aEntranceRepository;
-    final private NoiseAverageTestRepository noiseAverageTestRepository;
-    final private NoiseAverageTestDailyRepository noiseAverageTestDailyRepository;
-    final private NoiseAverageTestWeeklyRepository noiseAverageTestWeeklyRepository;
+    final private HourAverageARepository hourAverageARepository;
+    final private HourAverageBRepository hourAverageBRepository;
+    final private HourAverageCRepository hourAverageCRepository;
+
+    final private DayAverageARepository dayAverageARepository;
+    final private DayAverageBRepository dayAverageBRepository;
+    final private DayAverageCRepository dayAverageCRepository;
+
+    final private WeekAverageARepository weekAverageARepository;
+    final private WeekAverageBRepository weekAverageBRepository;
+    final private WeekAverageCRepository weekAverageCRepository;
+
     //private ShushDataService dataService;
     final private ShushDataService shushDataService;
 
-    @GetMapping("loadAverageData")
-    public void DataAverageLoad(){
-        System.out.println("started hourly calculating");
-        shushDataService.calculateHourlyAverage(360);
-        System.out.println("ended hourly calculating");
-        System.out.println("started daily calculating");
-        shushDataService.calculateDailyAverage();
-        System.out.println("ended daily calculating");
-        System.out.println("started weekly calculating");
-        shushDataService.calculateWeeklyAverage();
-        System.out.println("ended weekly calculating");
+    public static LocalDate getLastSunday(LocalDate date){
+        int daysToLastSunday = date.getDayOfWeek().getValue();
+        if(daysToLastSunday==7)
+            return date;
+        else
+            return date.minusDays(daysToLastSunday);
+    }
+    public static LocalDate getThisSaturday(LocalDate date){
+        int daysToLastSunday = date.getDayOfWeek().getValue();
+        if(daysToLastSunday==7)
+            return date.plusDays(6);
+        else
+            return date.plusDays(6- daysToLastSunday);
+        //6이면 0
+        //5이면 1
+        //4면 2
+        //3이면 3
+        //2면 4
+        //1이면 5
+        //0이면 6
+
+    }
+    @GetMapping("/hourly/{year}-{month}-{day}/A")
+    public List<HourAverageAEntity> hourlyAverageAData(@PathVariable int year,
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return hourAverageARepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
+    }
+    @GetMapping("/hourly/{year}-{month}-{day}/B")
+    public List<HourAverageBEntity> hourlyAverageBData(@PathVariable int year,
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return hourAverageBRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
+    }
+    @GetMapping("/hourly/{year}-{month}-{day}/C")
+    public List<HourAverageCEntity> hourlyAverageCData(@PathVariable int year,
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return hourAverageCRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
+    }
+
+
+    @GetMapping("/daily/{year}-{month}-{day}/A")
+    public List<DayAverageAEntity> dailyAverageAData(@PathVariable int year,
+                                 @PathVariable int month,
+                                 @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return dayAverageARepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
+
+    }
+    @GetMapping("/daily/{year}-{month}-{day}/B")
+    public List<DayAverageBEntity> dailyAverageBData(@PathVariable int year,
+                                                     @PathVariable int month,
+                                                     @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return dayAverageBRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
+
+    }
+    @GetMapping("/daily/{year}-{month}-{day}/C")
+    public List<DayAverageCEntity> dailyAverageCData(@PathVariable int year,
+                                                     @PathVariable int month,
+                                                     @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        LocalDate saturday = getThisSaturday(date);
+        date = getLastSunday(date);
+
+        return dayAverageCRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                date.getYear(), saturday.getYear(),
+                date.getMonth().getValue(), saturday.getMonth().getValue(),
+                date.getDayOfMonth(), saturday.getDayOfMonth());
 
     }
 
-    @ResponseBody
-    @PostMapping("data")
-    public List<AEntranceEntity> rawData(){
-        return aEntranceRepository.findAll();
-    }
-
-    @GetMapping("averageDataHourly")
-    public List<NoiseAverageTestEntity> hourlyAverageData(){
-        //dataService.calculateHourlyAverage(360);
-        System.out.println("Hourly data requested");
-        return noiseAverageTestRepository.findAll();
+    @GetMapping("/weekly/{year}-{month}-{day}/A")
+    public List<WeekAverageAEntity> weeklyAverageAData(@PathVariable int year,
+                                                      @PathVariable int month,
+                                                      @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        date = getLastSunday(date);
+        return weekAverageARepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 
     }
+    @GetMapping("/weekly/{year}-{month}-{day}/B")
+    public List<WeekAverageBEntity> weeklyAverageBData(@PathVariable int year,
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        date = getLastSunday(date);
+        return weekAverageBRepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 
-    @GetMapping("averageDataDaily")
-    public List<NoiseAverageTestDailyEntity> dailyAverageData(){
-        //dataService.calculateDailyAverage();
-        System.out.println("Daily data requested");
-        return noiseAverageTestDailyRepository.findAll();
     }
+    @GetMapping("/weekly/{year}-{month}-{day}/C")
+    public List<WeekAverageCEntity> weeklyAverageCData(@PathVariable int year,
+                                                      @PathVariable int month,
+                                                      @PathVariable int day){
+        LocalDate date = LocalDate.of(year,month, day);
+        date = getLastSunday(date);
+        return weekAverageCRepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 
-    @GetMapping("averageDataWeekly")
-    public List<NoiseAverageTestWeeklyEntity> weeklyAverageData(){
-        //dataService.calculateWeeklyAverage();
-        System.out.println("weekly data requested");
-        return noiseAverageTestWeeklyRepository.findAll();
-    }
-
-    @GetMapping("hello")
-    public String test() {
-        return "Hello, world!";
     }
 
 }
