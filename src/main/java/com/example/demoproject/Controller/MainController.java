@@ -10,12 +10,11 @@ import java.util.List;
 import java.time.*;
 
 
-@CrossOrigin(originPatterns = "http://localhost:3000")
+
 @RequiredArgsConstructor
 @RestController//해당 클래스를 Controller 레이어로 인식하게함//@Controller+@REsponseBody임
 @RequestMapping(value= "/getAverageData")//()안에 URL패턴이 오고 - request왔을때 request의 url의 패턴을 보고 해당하는 클래스를 실행
 public class MainController {
-
     final private HourAverageARepository hourAverageARepository;
     final private HourAverageBRepository hourAverageBRepository;
     final private HourAverageCRepository hourAverageCRepository;
@@ -53,47 +52,40 @@ public class MainController {
         //0이면 6
 
     }
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/hourly/{year}-{month}-{day}/A")
     public List<HourAverageAEntity> hourlyAverageAData(@PathVariable int year,
                                                        @PathVariable int month,
                                                        @PathVariable int day){
-        LocalDate date = LocalDate.of(year,month, day);
-        LocalDate saturday = getThisSaturday(date);
-        date = getLastSunday(date);
-
-        return hourAverageARepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
-                date.getYear(), saturday.getYear(),
-                date.getMonth().getValue(), saturday.getMonth().getValue(),
-                date.getDayOfMonth(), saturday.getDayOfMonth());
+        return hourAverageARepository.findById_YearAndId_MonthAndId_Day(
+                year,
+                month,
+                day);
     }
+
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/hourly/{year}-{month}-{day}/B")
     public List<HourAverageBEntity> hourlyAverageBData(@PathVariable int year,
                                                        @PathVariable int month,
                                                        @PathVariable int day){
-        LocalDate date = LocalDate.of(year,month, day);
-        LocalDate saturday = getThisSaturday(date);
-        date = getLastSunday(date);
-
-        return hourAverageBRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
-                date.getYear(), saturday.getYear(),
-                date.getMonth().getValue(), saturday.getMonth().getValue(),
-                date.getDayOfMonth(), saturday.getDayOfMonth());
+        return hourAverageBRepository.findById_YearAndId_MonthAndId_Day(
+                year,
+                month,
+                day);
     }
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/hourly/{year}-{month}-{day}/C")
     public List<HourAverageCEntity> hourlyAverageCData(@PathVariable int year,
                                                        @PathVariable int month,
                                                        @PathVariable int day){
-        LocalDate date = LocalDate.of(year,month, day);
-        LocalDate saturday = getThisSaturday(date);
-        date = getLastSunday(date);
-
-        return hourAverageCRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
-                date.getYear(), saturday.getYear(),
-                date.getMonth().getValue(), saturday.getMonth().getValue(),
-                date.getDayOfMonth(), saturday.getDayOfMonth());
+        return hourAverageCRepository.findById_YearAndId_MonthAndId_Day(
+                year,
+                month,
+                day);
     }
 
 
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/daily/{year}-{month}-{day}/A")
     public List<DayAverageAEntity> dailyAverageAData(@PathVariable int year,
                                  @PathVariable int month,
@@ -108,6 +100,7 @@ public class MainController {
                 date.getDayOfMonth(), saturday.getDayOfMonth());
 
     }
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/daily/{year}-{month}-{day}/B")
     public List<DayAverageBEntity> dailyAverageBData(@PathVariable int year,
                                                      @PathVariable int month,
@@ -122,6 +115,7 @@ public class MainController {
                 date.getDayOfMonth(), saturday.getDayOfMonth());
 
     }
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/daily/{year}-{month}-{day}/C")
     public List<DayAverageCEntity> dailyAverageCData(@PathVariable int year,
                                                      @PathVariable int month,
@@ -137,6 +131,7 @@ public class MainController {
 
     }
 
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/weekly/{year}-{month}-{day}/A")
     public List<WeekAverageAEntity> weeklyAverageAData(@PathVariable int year,
                                                       @PathVariable int month,
@@ -146,6 +141,7 @@ public class MainController {
         return weekAverageARepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 
     }
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/weekly/{year}-{month}-{day}/B")
     public List<WeekAverageBEntity> weeklyAverageBData(@PathVariable int year,
                                                        @PathVariable int month,
@@ -155,6 +151,8 @@ public class MainController {
         return weekAverageBRepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 
     }
+
+    @CrossOrigin(originPatterns = "*")
     @GetMapping("/weekly/{year}-{month}-{day}/C")
     public List<WeekAverageCEntity> weeklyAverageCData(@PathVariable int year,
                                                       @PathVariable int month,
