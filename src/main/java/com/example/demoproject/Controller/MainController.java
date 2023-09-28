@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.util.ArrayUtils;
+
 import java.util.List;
 import java.time.*;
 
@@ -109,11 +111,21 @@ public class MainController {
         LocalDate saturday = getThisSaturday(date);
         date = getLastSunday(date);
 
-        return dayAverageBRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
-                date.getYear(), saturday.getYear(),
-                date.getMonth().getValue(), saturday.getMonth().getValue(),
-                date.getDayOfMonth(), saturday.getDayOfMonth());
 
+        if(date.getMonth() != saturday.getMonth() || date.getYear() != saturday.getYear() ) {
+
+            List<DayAverageBEntity> result = dayAverageBRepository.findById_YearAndId_MonthAndId_DayGreaterThanEqual(
+                    date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
+            result.addAll(dayAverageBRepository.findById_YearAndId_MonthAndId_DayLessThanEqual(
+                    saturday.getYear(), saturday.getMonth().getValue(), saturday.getDayOfMonth()));
+            return result;
+        }
+        else{
+            return dayAverageBRepository.findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(
+                    date.getYear(), saturday.getYear(),
+                    date.getMonth().getValue(), saturday.getMonth().getValue(),
+                    date.getDayOfMonth(), saturday.getDayOfMonth());
+        }
     }
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/daily/{year}-{month}-{day}/C")
