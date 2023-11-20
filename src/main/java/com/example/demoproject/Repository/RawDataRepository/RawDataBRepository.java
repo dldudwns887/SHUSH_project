@@ -14,4 +14,6 @@ public interface RawDataBRepository extends JpaRepository<RawDataBEntity, RawDat
     RawDataBEntity findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
 
     List<RawDataBEntity> findById_YearAndId_MonthAndId_DayAndId_Hour(int recentYear, int recentMonth, int recentDay, int recentHour);
+
+    boolean existsById_YearAndId_month(int recentYear, int recentMonth);
 }
