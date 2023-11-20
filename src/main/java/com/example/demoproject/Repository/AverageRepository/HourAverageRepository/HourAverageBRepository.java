@@ -15,4 +15,5 @@ public interface HourAverageBRepository extends JpaRepository<HourAverageBEntity
 
     List<HourAverageBEntity> findById_YearAndId_MonthAndId_Day(int recentYear, int recentMonth, int recentDay);
 
+    boolean existsById_YearAndId_month(int recentYear, int recentMonth);
 }

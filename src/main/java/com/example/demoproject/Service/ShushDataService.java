@@ -28,8 +28,6 @@ import com.example.demoproject.Repository.AverageRepository.WeekAverageRepositor
 import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageBRepository;
 import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageCRepository;
 import com.example.demoproject.Repository.RawDataRepository.*;
-import com.example.demoproject.Repository.RepositoryInterface.HourAverageRepository;
-import com.example.demoproject.Repository.RepositoryInterface.RawDataRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +36,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -55,8 +54,6 @@ public class ShushDataService implements CommandLineRunner {
     private final WeekAverageARepository weekAverageA;
     private final WeekAverageBRepository weekAverageB;
     private final WeekAverageCRepository weekAverageC;
-    private final HourAverageRepository hourAverageRepository;
-    private final RawDataRepository rawDataRepository;
     List<Integer> monthlyDays = Arrays.asList(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
     public ShushDataService(RawDataARepository rawDataA,
@@ -70,9 +67,8 @@ public class ShushDataService implements CommandLineRunner {
                             DayAverageCRepository dayAverageC,
                             WeekAverageARepository weekAverageA,
                             WeekAverageBRepository weekAverageB,
-                            WeekAverageCRepository weekAverageC,
-                            HourAverageRepository hourAverageRepository,
-                            RawDataRepository rawDataRepository) {
+                            WeekAverageCRepository weekAverageC
+                            ) {
         this.rawDataA = rawDataA;
         this.rawDataB = rawDataB;
         this.rawDataC = rawDataC;
@@ -85,8 +81,6 @@ public class ShushDataService implements CommandLineRunner {
         this.weekAverageA = weekAverageA;
         this.weekAverageB = weekAverageB;
         this.weekAverageC = weekAverageC;
-        this.hourAverageRepository = hourAverageRepository;
-        this.rawDataRepository = rawDataRepository;
     }
 
     @Override
@@ -117,6 +111,7 @@ public class ShushDataService implements CommandLineRunner {
                 hourAverageEntity = (HourAverageInterface) hourAEntity;
                 RawDataAEntity rawDataAEntity = rawDataA.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
                 rawDataEntity = (RawDataAEntity)rawDataAEntity;
+
             }
             case ('B') -> {
                 HourAverageBEntity hourBEntity = hourAverageB.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
@@ -143,7 +138,7 @@ public class ShushDataService implements CommandLineRunner {
                 recentMonth = hourAverageEntity.getId().getMonth();
                 recentDay = hourAverageEntity.getId().getDay();
                 recentHour = hourAverageEntity.getId().getHour();
-                hourAverageA.delete(hourAverageEntity);//1개 중복연산을 방지하기 위해 제일 최근 평균 데이터 하나쯤은 날린다 그냥
+                //hourAverageA.delete(hourAverageEntity);//1개 중복연산을 방지하기 위해 제일 최근 평균 데이터 하나쯤은 날린다 그냥
             }
 
             while (true) {
@@ -214,8 +209,29 @@ public class ShushDataService implements CommandLineRunner {
                 List<RawDataAEntity> rawDataAEntities = rawDataA.findById_YearAndId_MonthAndId_DayAndId_Hour(
                         recentYear, recentMonth, recentDay, recentHour);
 
-                if (rawDataAEntities.isEmpty())
-                    break;
+                if (rawDataAEntities.isEmpty()) {
+                    if(recentHour !=24) {
+                        recentHour += 1;
+                        continue;
+                    }
+                    else{
+                        if (recentDay <= monthlyDays.get(recentMonth)) {
+                            recentDay += 1;
+                            recentHour = 0;
+                            continue;
+                        }
+                        if (recentDay > monthlyDays.get(recentMonth)) {
+                            recentMonth += 1;
+                            recentDay = 1;
+                            if (recentMonth > 12) {
+                                recentYear += 1;
+                                recentMonth = 1;
+                            }
+                            if(!rawDataA.existsById_YearAndId_month(recentYear, recentMonth))
+                                break;
+                        }
+                    }
+                }
 
                 //평균값 계산.
                 average = rawDataAEntities.stream().mapToInt(RawDataAEntity::getDB).average().orElse(0.0);
@@ -226,7 +242,9 @@ public class ShushDataService implements CommandLineRunner {
                         .day(recentDay)
                         .hour(recentHour)
                         .a('a').build();
+
                 hourAverageA.save(HourAverageAEntity.builder().id(hourId).average(average).build());
+
                 recentHour += 1;
                 if (recentHour == 24) {
                     recentDay += 1;
@@ -266,8 +284,29 @@ public class ShushDataService implements CommandLineRunner {
                 List<RawDataBEntity> rawDataBEntities = rawDataB.findById_YearAndId_MonthAndId_DayAndId_Hour(
                         recentYear, recentMonth, recentDay, recentHour);
 
-                if (rawDataBEntities.isEmpty())
-                    break;
+                if (rawDataBEntities.isEmpty()) {
+                    if(recentHour !=24) {
+                        recentHour += 1;
+                        continue;
+                    }
+                    else{
+                        if (recentDay <= monthlyDays.get(recentMonth)) {
+                            recentDay += 1;
+                            recentHour = 0;
+                            continue;
+                        }
+                        if (recentDay > monthlyDays.get(recentMonth)) {
+                            recentMonth += 1;
+                            recentDay = 1;
+                            if (recentMonth > 12) {
+                                recentYear += 1;
+                                recentMonth = 1;
+                            }
+                            if(!rawDataB.existsById_YearAndId_month(recentYear, recentMonth))
+                                break;
+                        }
+                    }
+                }
                 //평균값 계산.
                 average = rawDataBEntities.stream().mapToInt(RawDataBEntity::getDB).average().orElse(0.0);
                 //구한 평균값 저장
@@ -316,8 +355,29 @@ public class ShushDataService implements CommandLineRunner {
                 List<RawDataCEntity> rawDataCEntities = rawDataC.findById_YearAndId_MonthAndId_DayAndId_Hour(
                         recentYear, recentMonth, recentDay, recentHour);
 
-                if (rawDataCEntities.isEmpty())
-                    break;
+                if (rawDataCEntities.isEmpty()) {
+                    if(recentHour !=24) {
+                        recentHour += 1;
+                        continue;
+                    }
+                    else{
+                        if (recentDay <= monthlyDays.get(recentMonth)) {
+                            recentDay += 1;
+                            recentHour = 0;
+                            continue;
+                        }
+                        if (recentDay > monthlyDays.get(recentMonth)) {
+                            recentMonth += 1;
+                            recentDay = 1;
+                            if (recentMonth > 12) {
+                                recentYear += 1;
+                                recentMonth = 1;
+                            }
+                            if(!rawDataC.existsById_YearAndId_month(recentYear, recentMonth))
+                                break;
+                        }
+                    }
+                }
                 //평균값 계산.
                 average = rawDataCEntities.stream().mapToInt(RawDataCEntity::getDB).average().orElse(0.0);
                 //구한 평균값 저장
@@ -360,6 +420,7 @@ public class ShushDataService implements CommandLineRunner {
 
         DayAverageAEntity dayAEntity = dayAverageA.findTopByOrderById_YearDescId_MonthDescId_DayDesc();
         HourAverageAEntity hourAverageAEntity = hourAverageA.findTopByOrderById_YearAscId_MonthAscId_DayAsc();
+
         if(hourAverageAEntity !=null) {
             if (dayAEntity == null) {
 
@@ -378,8 +439,24 @@ public class ShushDataService implements CommandLineRunner {
                         recentYear, recentMonth, recentDay);
 
                 if (hourAverageAEntities.isEmpty()) {
-                    break;
+                    if (recentDay <= monthlyDays.get(recentMonth)) {
+                        recentDay += 1;
+                        continue;
+                    }
+                    else{
+                        recentMonth += 1;
+                        recentDay = 1;
+                        if (recentMonth > 12) {
+                            recentYear += 1;
+                            recentMonth = 1;
+                        }
+                            if(!hourAverageA.existsById_YearAndId_month(recentYear, recentMonth))
+                                break;
+                            else
+                                continue;
+                        }
                 }
+
                 average = hourAverageAEntities.stream()
                         .mapToDouble(HourAverageAEntity::getAverage)
                         .average()
@@ -423,7 +500,22 @@ public class ShushDataService implements CommandLineRunner {
                         recentYear, recentMonth, recentDay);
 
                 if (hourAverageBEntities.isEmpty()) {
-                    break;
+                    if (recentDay <= monthlyDays.get(recentMonth)) {
+                        recentDay += 1;
+                        continue;
+                    }
+                    else{
+                        recentMonth += 1;
+                        recentDay = 1;
+                        if (recentMonth > 12) {
+                            recentYear += 1;
+                            recentMonth = 1;
+                        }
+                        if(!hourAverageB.existsById_YearAndId_month(recentYear, recentMonth))
+                            break;
+                        else
+                            continue;
+                    }
                 }
                 average = hourAverageBEntities.stream()
                         .mapToDouble(HourAverageBEntity::getAverage)
@@ -469,7 +561,22 @@ public class ShushDataService implements CommandLineRunner {
                         recentYear, recentMonth, recentDay);
 
                 if (hourAverageCEntities.isEmpty()) {
-                    break;
+                    if (recentDay <= monthlyDays.get(recentMonth)) {
+                        recentDay += 1;
+                        continue;
+                    }
+                    else{
+                        recentMonth += 1;
+                        recentDay = 1;
+                        if (recentMonth > 12) {
+                            recentYear += 1;
+                            recentMonth = 1;
+                        }
+                        if(!hourAverageC.existsById_YearAndId_month(recentYear, recentMonth))
+                            break;
+                        else
+                            continue;
+                    }
                 }
                 average = hourAverageCEntities.stream()
                         .mapToDouble(HourAverageCEntity::getAverage)
