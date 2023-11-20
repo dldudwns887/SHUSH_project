@@ -55,6 +55,8 @@ public class ShushDataService implements CommandLineRunner {
     private final WeekAverageARepository weekAverageA;
     private final WeekAverageBRepository weekAverageB;
     private final WeekAverageCRepository weekAverageC;
+    private final HourAverageRepository hourAverageRepository;
+    private final RawDataRepository rawDataRepository;
     List<Integer> monthlyDays = Arrays.asList(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
     public ShushDataService(RawDataARepository rawDataA,
@@ -68,7 +70,9 @@ public class ShushDataService implements CommandLineRunner {
                             DayAverageCRepository dayAverageC,
                             WeekAverageARepository weekAverageA,
                             WeekAverageBRepository weekAverageB,
-                            WeekAverageCRepository weekAverageC) {
+                            WeekAverageCRepository weekAverageC,
+                            HourAverageRepository hourAverageRepository,
+                            RawDataRepository rawDataRepository) {
         this.rawDataA = rawDataA;
         this.rawDataB = rawDataB;
         this.rawDataC = rawDataC;
@@ -81,7 +85,8 @@ public class ShushDataService implements CommandLineRunner {
         this.weekAverageA = weekAverageA;
         this.weekAverageB = weekAverageB;
         this.weekAverageC = weekAverageC;
-
+        this.hourAverageRepository = hourAverageRepository;
+        this.rawDataRepository = rawDataRepository;
     }
 
     @Override
@@ -106,12 +111,8 @@ public class ShushDataService implements CommandLineRunner {
         HourAverageInterface hourAverageEntity=null;
         RawDataInterface rawDataEntity = null;
 
-        HourAverageRepository hourAverageRepository = null;
-        RawDataRepository rawDataRepository = null;
-
         switch (position) {
             case ('A') -> {
-
                 HourAverageAEntity hourAEntity = hourAverageA.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
                 hourAverageEntity = (HourAverageInterface) hourAEntity;
                 RawDataAEntity rawDataAEntity = rawDataA.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
