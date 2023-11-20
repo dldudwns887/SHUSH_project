@@ -1,6 +1,7 @@
-package com.example.demoproject.Entity.AverageEntity;
+package com.example.demoproject.Entity.AverageEntity.DayAverageEntity;
 
 import com.example.demoproject.Entity.EntityIDs.DayAverageId;
+import com.example.demoproject.Entity.EntityInterface.DayAverageInterface;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -13,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "ADayAverage")
-@Table(name = "day_average_a")
+@Entity(name = "BDayAverage")
+@Table(name = "day_average_b")
 
-public class DayAverageAEntity {
+public class DayAverageBEntity implements DayAverageInterface {
     @EmbeddedId
     private DayAverageId id;
     private double average;

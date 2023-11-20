@@ -1,4 +1,4 @@
-package com.example.demoproject.Entity.AverageEntity;
+package com.example.demoproject.Entity.AverageEntity.WeekAverageEntity;
 
 import com.example.demoproject.Entity.EntityIDs.WeekAverageId;
 import jakarta.persistence.EmbeddedId;

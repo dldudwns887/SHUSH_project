@@ -1,4 +1,4 @@
-package com.example.demoproject.Entity.AverageEntity;
+package com.example.demoproject.Entity.AverageEntity.WeekAverageEntity;
 
 import com.example.demoproject.Entity.EntityIDs.WeekAverageId;
 import jakarta.persistence.EmbeddedId;
@@ -13,12 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "CWeekAverage")
-@Table(name = "week_average_c")
+@Entity(name = "AWeekAverage")
+@Table(name = "week_average_a")
 
-public class WeekAverageCEntity {
+public class WeekAverageAEntity {
     @EmbeddedId
     private WeekAverageId id;
+
     private int endYear;
     private int endMonth;
     private int endDay;
