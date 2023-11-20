@@ -28,6 +28,8 @@ import com.example.demoproject.Repository.AverageRepository.WeekAverageRepositor
 import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageBRepository;
 import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageCRepository;
 import com.example.demoproject.Repository.RawDataRepository.*;
+import com.example.demoproject.Repository.RepositoryInterface.HourAverageRepository;
+import com.example.demoproject.Repository.RepositoryInterface.RawDataRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -100,10 +102,16 @@ public class ShushDataService implements CommandLineRunner {
         int recentHour;
         double average;
         HourAverageId hourId;
+
         HourAverageInterface hourAverageEntity=null;
         RawDataInterface rawDataEntity = null;
+
+        HourAverageRepository hourAverageRepository = null;
+        RawDataRepository rawDataRepository = null;
+
         switch (position) {
             case ('A') -> {
+
                 HourAverageAEntity hourAEntity = hourAverageA.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
                 hourAverageEntity = (HourAverageInterface) hourAEntity;
                 RawDataAEntity rawDataAEntity = rawDataA.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
