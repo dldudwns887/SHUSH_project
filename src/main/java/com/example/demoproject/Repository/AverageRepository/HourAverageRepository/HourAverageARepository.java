@@ -1,10 +1,9 @@
-package com.example.demoproject.Repository.AverageRepository;
-import com.example.demoproject.Entity.AverageEntity.HourAverageAEntity;
+package com.example.demoproject.Repository.AverageRepository.HourAverageRepository;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageAEntity;
 import com.example.demoproject.Entity.EntityIDs.HourAverageId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.Month;
 import java.util.List;
 
 @Repository

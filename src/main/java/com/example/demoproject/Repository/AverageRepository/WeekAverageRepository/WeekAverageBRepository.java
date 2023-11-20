@@ -1,5 +1,5 @@
-package com.example.demoproject.Repository.AverageRepository;
-import com.example.demoproject.Entity.AverageEntity.WeekAverageBEntity;
+package com.example.demoproject.Repository.AverageRepository.WeekAverageRepository;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageBEntity;
 import com.example.demoproject.Entity.EntityIDs.WeekAverageId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
