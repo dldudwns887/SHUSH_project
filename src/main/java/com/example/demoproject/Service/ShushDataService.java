@@ -1,14 +1,32 @@
 package com.example.demoproject.Service;
 
 
-import com.example.demoproject.Entity.AverageEntity.*;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageCEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageCEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageCEntity;
 import com.example.demoproject.Entity.EntityIDs.DayAverageId;
 import com.example.demoproject.Entity.EntityIDs.HourAverageId;
 import com.example.demoproject.Entity.EntityIDs.WeekAverageId;
+import com.example.demoproject.Entity.EntityInterface.HourAverageInterface;
+import com.example.demoproject.Entity.EntityInterface.RawDataInterface;
 import com.example.demoproject.Entity.RawDataEntity.RawDataAEntity;
 import com.example.demoproject.Entity.RawDataEntity.RawDataBEntity;
 import com.example.demoproject.Entity.RawDataEntity.RawDataCEntity;
-import com.example.demoproject.Repository.AverageRepository.*;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageCRepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageCRepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageCRepository;
 import com.example.demoproject.Repository.RawDataRepository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.domain.Page;
@@ -72,6 +90,90 @@ public class ShushDataService implements CommandLineRunner {
     }
 
     //한 주간 average
+
+
+    public void calculateHourlyAverageFunction(char position) {
+        System.out.println("Started Hourly average calculation : "+position);
+        int recentYear;
+        int recentMonth;
+        int recentDay;
+        int recentHour;
+        double average;
+        HourAverageId hourId;
+        HourAverageInterface hourAverageEntity=null;
+        RawDataInterface rawDataEntity = null;
+        switch (position) {
+            case ('A') -> {
+                HourAverageAEntity hourAEntity = hourAverageA.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
+                hourAverageEntity = (HourAverageInterface) hourAEntity;
+                RawDataAEntity rawDataAEntity = rawDataA.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
+                rawDataEntity = (RawDataAEntity)rawDataAEntity;
+            }
+            case ('B') -> {
+                HourAverageBEntity hourBEntity = hourAverageB.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
+                hourAverageEntity = (HourAverageInterface) hourBEntity;
+                RawDataBEntity rawDataBEntity = rawDataB.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
+                rawDataEntity = (RawDataBEntity)rawDataBEntity;
+            }
+            case ('C') -> {
+                HourAverageCEntity hourCEntity = hourAverageC.findTopByOrderById_YearDescId_MonthDescId_DayDescId_HourDesc();
+                hourAverageEntity = (HourAverageInterface) hourCEntity;
+                RawDataCEntity rawDataCEntity = rawDataC.findTopByOrderById_YearAscId_MonthAscId_DayAscId_HourAsc();
+                rawDataEntity = (RawDataCEntity)rawDataCEntity;
+            }
+        }
+
+        if(rawDataEntity !=null ) {
+            if (hourAverageEntity == null) {
+                recentYear = rawDataEntity.getId().getYear();
+                recentMonth = rawDataEntity.getId().getMonth();
+                recentDay = rawDataEntity.getId().getDay();
+                recentHour = rawDataEntity.getId().getHour();
+            } else {
+                recentYear = hourAverageEntity.getId().getYear();
+                recentMonth = hourAverageEntity.getId().getMonth();
+                recentDay = hourAverageEntity.getId().getDay();
+                recentHour = hourAverageEntity.getId().getHour();
+                hourAverageA.delete(hourAverageEntity);//1개 중복연산을 방지하기 위해 제일 최근 평균 데이터 하나쯤은 날린다 그냥
+            }
+
+            while (true) {
+
+                List<RawDataAEntity> rawDataAEntities = rawDataA.findById_YearAndId_MonthAndId_DayAndId_Hour(
+                        recentYear, recentMonth, recentDay, recentHour);
+
+                if (rawDataAEntities.isEmpty())
+                    break;
+
+                //평균값 계산.
+                average = rawDataAEntities.stream().mapToInt(RawDataAEntity::getDB).average().orElse(0.0);
+                //구한 평균값 저장
+                hourId = HourAverageId.builder()
+                        .year(recentYear)
+                        .month(recentMonth)
+                        .day(recentDay)
+                        .hour(recentHour)
+                        .a('a').build();
+                hourAverageA.save(HourAverageAEntity.builder().id(hourId).average(average).build());
+                recentHour += 1;
+                if (recentHour == 24) {
+                    recentDay += 1;
+                    recentHour = 0;
+                    if (recentDay > monthlyDays.get(recentMonth)) {
+                        recentMonth += 1;
+                        recentDay = 1;
+                        if (recentMonth > 12) {
+                            recentYear += 1;
+                            recentMonth = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+    }
     @Scheduled(cron = "0 0 * * * *")
     public void calculateHourlyAverage() {
         System.out.println("Started Hourly average calculation");
@@ -105,6 +207,7 @@ public class ShushDataService implements CommandLineRunner {
 
                 if (rawDataAEntities.isEmpty())
                     break;
+
                 //평균값 계산.
                 average = rawDataAEntities.stream().mapToInt(RawDataAEntity::getDB).average().orElse(0.0);
                 //구한 평균값 저장
@@ -231,6 +334,8 @@ public class ShushDataService implements CommandLineRunner {
                 }
             }
         }
+
+
         System.out.println("Ended Hourly average calculation");
 
     }

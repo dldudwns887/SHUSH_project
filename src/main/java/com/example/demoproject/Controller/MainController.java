@@ -1,12 +1,25 @@
 package com.example.demoproject.Controller;
-import com.example.demoproject.Entity.AverageEntity.*;
-import com.example.demoproject.Repository.AverageRepository.*;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.DayAverageEntity.DayAverageCEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.HourAverageEntity.HourAverageCEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageAEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageBEntity;
+import com.example.demoproject.Entity.AverageEntity.WeekAverageEntity.WeekAverageCEntity;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.DayAverageRepository.DayAverageCRepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.HourAverageRepository.HourAverageCRepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageARepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageBRepository;
+import com.example.demoproject.Repository.AverageRepository.WeekAverageRepository.WeekAverageCRepository;
 import com.example.demoproject.Service.ShushDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import java.util.List;
 import java.time.*;
@@ -90,8 +103,8 @@ public class MainController {
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/daily/{year}-{month}-{day}/A")
     public List<DayAverageAEntity> dailyAverageAData(@PathVariable int year,
-                                 @PathVariable int month,
-                                 @PathVariable int day){
+                                                     @PathVariable int month,
+                                                     @PathVariable int day){
         LocalDate date = LocalDate.of(year,month, day);
         LocalDate saturday = getThisSaturday(date);
         date = getLastSunday(date);
@@ -146,8 +159,8 @@ public class MainController {
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/weekly/{year}-{month}-{day}/A")
     public List<WeekAverageAEntity> weeklyAverageAData(@PathVariable int year,
-                                                      @PathVariable int month,
-                                                      @PathVariable int day){
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
         LocalDate date = LocalDate.of(year,month, day);
         date = getLastSunday(date);
         return weekAverageARepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
@@ -167,8 +180,8 @@ public class MainController {
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/weekly/{year}-{month}-{day}/C")
     public List<WeekAverageCEntity> weeklyAverageCData(@PathVariable int year,
-                                                      @PathVariable int month,
-                                                      @PathVariable int day){
+                                                       @PathVariable int month,
+                                                       @PathVariable int day){
         LocalDate date = LocalDate.of(year,month, day);
         date = getLastSunday(date);
         return weekAverageCRepository.findById_StartYearAndId_StartMonthAndId_StartDay(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
