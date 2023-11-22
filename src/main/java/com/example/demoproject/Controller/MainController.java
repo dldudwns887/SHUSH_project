@@ -67,6 +67,16 @@ public class MainController {
         //0이면 6
 
     }
+
+    @CrossOrigin(originPatterns = "*")
+    @GetMapping("/existing_days_in_month/{year}-{month}/A")
+    public List<HourAverageAEntity> getAvailableDay(@PathVariable int year,
+                                                    @PathVariable int month){
+        return hourAverageARepository.findById_YearAndId_Month(
+                year,
+                month);
+    }
+
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/hourly/{year}-{month}-{day}/A")
     public List<HourAverageAEntity> hourlyAverageAData(@PathVariable int year,
