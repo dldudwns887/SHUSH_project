@@ -16,4 +16,8 @@ public interface DayAverageBRepository extends JpaRepository<DayAverageBEntity, 
     List<DayAverageBEntity> findById_YearBetweenAndId_MonthBetweenAndId_DayBetween(int year, int year1, int month, int month1, int dayOfMonth, int day);
     List<DayAverageBEntity> findById_YearAndId_MonthAndId_DayGreaterThanEqual(int year, int month, int day);
     List<DayAverageBEntity> findById_YearAndId_MonthAndId_DayLessThanEqual(int year, int month, int day);
+
+    List<DayAverageBEntity> findById_YearAndId_Month(int year, int month);
+
+    DayAverageBEntity findById_YearAndId_MonthDesc(int year, int month);
 }

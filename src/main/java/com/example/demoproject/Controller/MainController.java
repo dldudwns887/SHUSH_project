@@ -70,9 +70,27 @@ public class MainController {
 
     @CrossOrigin(originPatterns = "*")
     @GetMapping("/existing_days_in_month/{year}-{month}/A")
-    public List<DayAverageAEntity> getAvailableDay(@PathVariable int year,
+    public List<DayAverageAEntity> getAvailableDayA(@PathVariable int year,
                                                     @PathVariable int month){
         return dayAverageARepository.findById_YearAndId_Month(
+                year,
+                month);
+    }
+
+    @CrossOrigin(originPatterns = "*")
+    @GetMapping("/existing_days_in_month/{year}-{month}/B")
+    public List<DayAverageBEntity> getAvailableDayB(@PathVariable int year,
+                                                    @PathVariable int month){
+        return dayAverageBRepository.findById_YearAndId_Month(
+                year,
+                month);
+    }
+
+    @CrossOrigin(originPatterns = "*")
+    @GetMapping("/existing_days_in_month/{year}-{month}/C")
+    public List<DayAverageCEntity> getAvailableDayC(@PathVariable int year,
+                                                    @PathVariable int month){
+        return dayAverageCRepository.findById_YearAndId_Month(
                 year,
                 month);
     }
