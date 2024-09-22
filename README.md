@@ -30,6 +30,22 @@
 ![image](https://github.com/Garodden/SHUSH_project/assets/44630705/650b82cd-4aed-4ed2-bc33-39c708aecfa7)
 ![image](https://github.com/Garodden/SHUSH_project/assets/44630705/e607f717-13e0-468e-a663-5936dae9c591)
 ![image](https://github.com/Garodden/SHUSH_project/assets/44630705/a933b931-cd51-43f1-85b9-e0f2675acf5a)
+
+### 통신 방식
+#### 아두이노 파트
+![image](https://github.com/user-attachments/assets/78e8f49c-e512-48b2-b3e1-0664ae3a30f2)
+- Radio Frequency(RF)
+  - 다른 통신에 비해 따로 서버나 WAN을 구축할 필요가 없음.
+  - 높은 데이터 전송 속도 및 유연성 제공  
+  - 이를 위해 RF 통신이 가능한 nRF24L01 부품을 사용
+#### 통신 알고리즘
+![image](https://github.com/user-attachments/assets/a72ebfec-9a31-4829-904e-cd288e310386)
+
+#### 실패 내용
+ - 낮은 부품 내구성
+   - 소음측정현황판 특성상 하루에 12시간, 오랜 기간 동안 작동되어야만 하나 통신 부품이 버티지 못해 통신이 실패하는 경우가 발생.
+ 
+
 ### 실제 설치 사진
 ![image](https://github.com/Garodden/SHUSH_project/assets/44630705/e3a93359-2874-4d93-aa26-6f57ab826525)
 
